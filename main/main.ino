@@ -19,10 +19,26 @@ void initializeDisplay(){
   display.setTextAlignment(TEXT_ALIGN_LEFT);
 }
 
+void welcomeMessage(){
+  display.clear();
+  
+  display.drawString(0, 0, "Sistema de bombeamento");
+  display.drawString(0, 15, "d'água a longa");
+  display.drawString(0, 30, "distância");
+  display.drawString(0, 50, "Faculdade Guarapuava");
+
+  display.display();
+
+  delay(6000);
+
+  display.clear();
+}
+
 void setup() {
   Serial.begin(9600);
 
   initializeDisplay();
+  welcomeMessage();
 }
 
 void loop() {
