@@ -3,6 +3,14 @@
 // Instância do display
 SSD1306 display(0x3c, 4, 15);
 
+// Pinos de limite
+#define PIN_MIN_LIMIT 23
+#define PIN_MAX_LIMIT 17
+
+// Pinos de status
+#define PIN_LED_OK 13
+#define PIN_LED_ERR 12
+
 void initializeDisplay(){
   //O estado do GPIO16 é utilizado para controlar o display
   pinMode(16, OUTPUT);
@@ -36,6 +44,12 @@ void welcomeMessage(){
 
 void setup() {
   Serial.begin(9600);
+
+  pinMode(PIN_MIN_LIMIT, INPUT);
+  pinMode(PIN_MAX_LIMIT, INPUT);
+
+  pinMode(PIN_LED_OK, OUTPUT);
+  pinMode(PIN_LED_ERR, OUTPUT);
 
   initializeDisplay();
   welcomeMessage();
