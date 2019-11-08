@@ -1,7 +1,11 @@
 #include <SSD1306.h>
+#include <EEPROM.h>
 
 // Instância do display
 SSD1306 display(0x3c, 4, 15);
+
+// Número de bytes que seram acessados
+#define EEPROM_SIZE 2
 
 // Pinos de limite
 #define PIN_MIN_LIMIT 23
@@ -50,6 +54,10 @@ void setup() {
 
   pinMode(PIN_LED_OK, OUTPUT);
   pinMode(PIN_LED_ERR, OUTPUT);
+
+  EEPROM.begin(EEPROM_SIZE);
+  EEPROM.write(0, 1);
+  EEPROM.commit();
 
   initializeDisplay();
   welcomeMessage();
