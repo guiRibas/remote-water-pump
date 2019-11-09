@@ -60,6 +60,20 @@ void monitoringMinLimit(){
   }
 }
 
+void monitoringMaxLimit(){
+  if (digitalRead(PIN_MAX_LIMIT) == HIGH && EEPROM.read(1) != 0) {
+    EEPROM.write(1, 0);
+    EEPROM.commit();
+    
+    Serial.println("Desligar Motor");
+  }
+  
+  if (digitalRead(PIN_MIN_LIMIT) == LOW && EEPROM.read(1) == 0) {
+    EEPROM.write(1, 1);
+    EEPROM.commit();
+  }
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -70,7 +84,6 @@ void setup() {
   pinMode(PIN_LED_ERR, OUTPUT);
 
   EEPROM.begin(EEPROM_SIZE);
-  EEPROM.write(0, 1);
   EEPROM.commit();
 
   initializeDisplay();
@@ -82,6 +95,8 @@ void loop() {
   display.display();
 
   monitoringMinLimit();
+  delay(2);
+  monitoringMaxLimit();
 
   delay(1);
 }
