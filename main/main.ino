@@ -46,6 +46,20 @@ void welcomeMessage(){
   display.clear();
 }
 
+void monitoringMinLimit(){
+  if (digitalRead(PIN_MIN_LIMIT) == LOW && EEPROM.read(0) != 0) {
+    EEPROM.write(0, 0);
+    EEPROM.commit();
+    
+    Serial.println("Ligar Motor");
+  }
+  
+  if (digitalRead(PIN_MIN_LIMIT) == HIGH && EEPROM.read(0) == 0) {
+    EEPROM.write(0, 1);
+    EEPROM.commit();
+  }
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -66,4 +80,8 @@ void setup() {
 void loop() {
   display.drawString(0, 0, "Monitorando...");
   display.display();
+
+  monitoringMinLimit();
+
+  delay(1);
 }
