@@ -1,5 +1,17 @@
 #include <SSD1306.h>
 #include <EEPROM.h>
+#include <LoRa.h>
+
+// Pinos do lora
+#define SCK 5   // GPIO5  SCK
+#define MISO 19 // GPIO19 MISO
+#define MOSI 27 // GPIO27 MOSI
+#define SS 18   // GPIO18 CS
+#define RST 14  // GPIO14 RESET
+#define DI00 26 // GPIO26 IRQ(Interrupt Request)
+
+// Frequência de comunicação, 868MHz
+#define BAND 868E6
 
 // Instância do display
 SSD1306 display(0x3c, 4, 15);
@@ -74,6 +86,29 @@ void monitoringMaxLimit(){
   }
 }
 
+void setupLoRa(){ 
+  SPI.begin(SCK, MISO, MOSI, SS);
+  LoRa.setPins(SS, RST, DI00);
+
+  if (!LoRa.begin(BAND)){
+    display.clear();
+    display.setFont(ArialMT_Plain_24);
+    display.drawString(0, 0, "ALERTA!");
+    display.setFont(ArialMT_Plain_10);
+    display.drawString(0, 30, "Erro ao inicializar o LoRa!");
+    display.display();
+
+    digitalWrite(PIN_LED_ERR, HIGH);
+    
+    while (1);
+  }
+
+  LoRa.enableCrc();
+
+  digitalWrite(PIN_LED_ERR, LOW);
+  digitalWrite(PIN_LED_OK, HIGH);
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -88,6 +123,7 @@ void setup() {
 
   initializeDisplay();
   welcomeMessage();
+  setupLoRa();
 }
 
 void loop() {
