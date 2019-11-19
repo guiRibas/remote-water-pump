@@ -136,6 +136,7 @@ void setupLoRa()
 
 void sendPacket(int floaterStatus)
 {
+  Serial.println(floaterStatus);
   if (!LoRa.beginPacket())
   {
     display.clear();
